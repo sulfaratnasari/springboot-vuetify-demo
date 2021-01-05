@@ -32,16 +32,13 @@ public class Jwtauthfilter extends OncePerRequestFilter {
 
 		// Fetching the authorization header from the request.
 		String authenticationHeader = request.getHeader(Iconstants.HEADER);
-		System.out.println("authentication header : " + authenticationHeader);
 		Boolean expire = false;
 		try {
 			SecurityContext context = SecurityContextHolder.getContext();
-			System.out.println("context");
 
 			if (authenticationHeader != null && authenticationHeader.startsWith("Bearer")) {
 
 				final String bearerTkn = authenticationHeader.replaceAll(Iconstants.BEARER_TOKEN, "");
-				System.out.println("Following token is received from the protected url= "+bearerTkn);
 
 				try {
 					// Parsing the jwt token.
@@ -51,10 +48,8 @@ public class Jwtauthfilter extends OncePerRequestFilter {
 					if (claims.getBody().getExpiration()
 							.before(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))) {
 						expire = true;
-						System.out.println("expired");
 					} else {
 						expire = false;
-						System.out.println("not expired");
 					}
 
 					if (expire) {
